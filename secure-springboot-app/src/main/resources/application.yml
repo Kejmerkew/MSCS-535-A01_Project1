@@ -1,0 +1,34 @@
+server:
+  port: 8443
+  ssl:
+    enabled: true
+    key-store: classpath:keystore.p12
+    key-store-password: changeit       # in production, inject via environment var or vault
+    key-store-type: PKCS12
+    key-alias: secureapp
+
+  servlet:                             # Security properties (cookie/session)
+    session:
+      cookie:
+        http-only: true
+        secure: true
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/appdb?sslmode=prefer
+    username: postgres
+    password: pgpass
+  jpa:
+    hibernate:
+      ddl-auto: update   # for assignment; in production use migrations, e.g., Flyway
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: false
+
+  
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
